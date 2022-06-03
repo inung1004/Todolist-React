@@ -5,6 +5,7 @@ import CorrectionIcon from "./img/correction.svg"
 import CheckButton from './checkbutton'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import { async } from 'q'
 
 const BASEURL = "http://15.164.25.254:8080"
 const font = 'ACCchildrenheartOTF-Regular';
@@ -26,23 +27,25 @@ function Todolist() {
         if (e.key === "Enter") {
             await axios.post(`${BASEURL}/todo`,
                 {
-                    content: input
+                    contents: input
                 }
             );
-            const res = await axios.get(`${BASEURL}/todo`)
-            setRes(res.data);
+            getTodoList();
             setInput(""); //인풋창 비워주기
         }
     }
 
     useEffect(() => {
-        
-
         getTodoList()
     }, [/*여기가 비어있으면 렌더링했을 때 한 번만 실행*/]) // 새로고침했을 때 딱 한 번만 저장해놓은 투두 목록 불러오기
 
     const deleteList = async (Id) => {
-        await axios.delete(`${BASEURL}/todo/${Id}`).then(() => getTodoList()) // .then(getTOdoList()) -> 이렇게 하면 함 쉬고 실행 
+        await axios.delete(`${BASEURL}/todo/${Id}`).then(() => getTodoList()) // .then(getTodoList()) -> 이렇게 하면 함 쉬고 실행 
+    }
+
+    const allDelete = async () => {
+        await axios.delete(`${BASEURL}/todo/all`)
+        getTodoList();
     }
 
     return (
@@ -54,10 +57,11 @@ function Todolist() {
             <section>
                 <Subtitle>할 일</Subtitle>
                 <ListContainer>
+                    <AllDeleteButton onClick={() => allDelete()}>ALL</AllDeleteButton>
                     {res.map((data) => (
                         <List>
                             <CheckButton></CheckButton>
-                            <Todo>{data.content}</Todo>
+                            <Todo>{data.contents}</Todo>
                             <DeleteButton onClick={() => deleteList(data.id)}><img src={X} /></DeleteButton>
                         </List>
                     ))}
@@ -106,6 +110,7 @@ const ListContainer = styled.div`
     border-radius: 50px;
     background-color: white;
     margin-top: 19px;
+    margin-bottom: 30px;
 `
 const List = styled.div`
     display: flex;
@@ -128,6 +133,20 @@ const Todo = styled.span`
 `
 
 const DeleteButton = styled.button`
+    font-family: ${font};
+    width: 48px;
+    height: 48px;
+    background-color: #EC6F6F;
+    border-radius: 50%;
+    outline: none;
+    border: none;
+
+`
+const AllDeleteButton = styled.button`
+    margin-left: 835px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-family: ${font};
     width: 48px;
     height: 48px;
     background-color: #EC6F6F;
