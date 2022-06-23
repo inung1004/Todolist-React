@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -10,23 +10,20 @@ const font = 'ACCchildrenheartOTF-Regular';
 function Login() {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
     const onLogin = async () => {
-        await axios.post(`${BASEURL}/member/login`,
+        const res = await axios.post(`${BASEURL}/member/login`,
             {
                 accountId: id,
                 password: password
-            }).then(response => {
-                if (response.data.accessToken) {
-                    localStorage.setItem('access_token', response.data.accessToken);
-                }
             })
+
+        if (res.data.accessToken) {
+            localStorage.setItem('access_token', res.data.accessToken);
+            navigate(`/todolist`);
+        }
     }
 
-    useEffect(() => {
-        if (localStorage.getItem('access_token')) {
-            window.location.href = "/todolist";
-        }
-    }, [localStorage])
     return (
         <>
             <Id>

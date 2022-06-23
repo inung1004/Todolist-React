@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import { Link } from 'react-router-dom';
-import Login from './login';
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -28,7 +27,6 @@ function Signup() {
                 window.location.href = "/";
 
             } catch (error) {
-                console.log(error) 
                 alert(error.response.data);
             }
            

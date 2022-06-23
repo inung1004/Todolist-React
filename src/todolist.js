@@ -3,9 +3,8 @@ import X from "./img/x.svg"
 import CheckIcon from "./img/check.svg"
 import CorrectionIcon from "./img/correction.svg"
 import CheckButton from './checkbutton'
-import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { async } from 'q'
+import request from "./request";
 
 const BASEURL = "http://10.156.147.203:8080"
 const font = 'ACCchildrenheartOTF-Regular';
@@ -13,7 +12,7 @@ const font = 'ACCchildrenheartOTF-Regular';
 
 function Todolist() {
     const getTodoList = async () => {
-        const res = await axios.get(`${BASEURL}/todo`)  //투두 목록 가져오기
+        const res = await request.get(`${BASEURL}/todo`)  //투두 목록 가져오기
         setRes((res.data));
         console.log(res.data);
     }
@@ -22,10 +21,10 @@ function Todolist() {
     const [isSuccess, setIsSuccess] = useState("");
     const [checkIcon, setCheckIcon] = useState("");
     const [isChecked, setIsChecked] = useState(false);
-    console.log(res)
+
     const onSubmit = async (e) => {
         if (e.key === "Enter") {
-            await axios.post(`${BASEURL}/todo`,
+            await request.post(`${BASEURL}/todo`,
                 {
                     contents: input
                 }
@@ -40,12 +39,20 @@ function Todolist() {
     }, [/*여기가 비어있으면 렌더링했을 때 한 번만 실행*/]) // 새로고침했을 때 딱 한 번만 저장해놓은 투두 목록 불러오기
 
     const deleteList = async (Id) => {
-        await axios.delete(`${BASEURL}/todo/${Id}`).then(() => getTodoList()) // .then(getTodoList()) -> 이렇게 하면 함 쉬고 실행 
+        await request.delete(`${BASEURL}/todo/${Id}`).then(() => getTodoList()) // .then(getTodoList()) -> 이렇게 하면 함 쉬고 실행 
     }
 
     const allDelete = async () => {
-        await axios.delete(`${BASEURL}/todo/all`)
+        await request.delete(`${BASEURL}/todo/all`)
         getTodoList();
+    }
+
+    const onCrystal = async (e, id) => {
+        await request.put(`${BASEURL}/todo/${id}`,
+            {
+                contents: e.target.value
+            }
+        )
     }
 
     return (
@@ -61,7 +68,7 @@ function Todolist() {
                     {res.map((data) => (
                         <List>
                             <CheckButton></CheckButton>
-                            <Todo>{data.contents}</Todo>
+                            <Todo defaultValue={data.contents} onBlur={(e) => onCrystal(e, data.id)}></Todo>
                             <DeleteButton onClick={() => deleteList(data.id)}><img src={X} /></DeleteButton>
                         </List>
                     ))}
@@ -119,7 +126,7 @@ const List = styled.div`
     padding-left: 44px;
 `
 
-const Todo = styled.span`
+const Todo = styled.input`
     font-family: ${font};
     width: 630px;
     height: 48px;
@@ -130,6 +137,8 @@ const Todo = styled.span`
     align-items: center;
     padding-left: 20px;
     font-size: 30px;
+    border: none;
+    outline: none;
 `
 
 const DeleteButton = styled.button`
@@ -143,6 +152,8 @@ const DeleteButton = styled.button`
 
 `
 const AllDeleteButton = styled.button`
+    color: white;
+    font-size: 20px;
     margin-left: 835px;
     margin-top: 30px;
     margin-bottom: 30px;
