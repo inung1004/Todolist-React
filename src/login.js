@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const BASEURL = "http://10.156.147.203:8080"
+const BASEURL = process.env.REACT_APP_BASE_URL;
 const font = 'ACCchildrenheartOTF-Regular';
 
 
@@ -35,7 +35,7 @@ function Login() {
                 <Input onChange={(e) => { setPassword(e.target.value); }} type="password"></Input>
             </Password>
             <Footer>
-                <Link to="./signup">
+                <Link to="/signup">
                     <GoSignup>회원가입부터</GoSignup>
                 </Link>
                 <LoginButton onClick={onLogin}>로그인</LoginButton>

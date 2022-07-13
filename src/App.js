@@ -1,9 +1,8 @@
-import logo from './logo.svg';
 import './App.css'
 import Todolist from './todolist';
 import Signup from './signup';
 import Login from './login';
-import { Link, BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 function App() {
   return (

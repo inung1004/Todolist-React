@@ -6,7 +6,7 @@ import CheckButton from './checkbutton'
 import { useEffect, useState } from 'react'
 import request from "./request";
 
-const BASEURL = "http://10.156.147.203:8080"
+const BASEURL = process.env.REACT_APP_BASE_URL
 const font = 'ACCchildrenheartOTF-Regular';
 
 
@@ -65,6 +65,16 @@ function Todolist() {
                 <Subtitle>할 일</Subtitle>
                 <ListContainer>
                     <AllDeleteButton onClick={() => allDelete()}>ALL</AllDeleteButton>
+                    <List>
+                        <CheckButton></CheckButton>
+                        <Todo defaultValue={"그림 색칠하기"} onBlur={(e) => onCrystal(e, 3)}></Todo>
+                        <DeleteButton onClick={() => deleteList(3)}><img src={X} /></DeleteButton>
+                    </List>
+                    <List>
+                        <CheckButton></CheckButton>
+                        <Todo defaultValue={"컴구 복습하기"} onBlur={(e) => onCrystal(e, 3)}></Todo>
+                        <DeleteButton onClick={() => deleteList(3)}><img src={X} /></DeleteButton>
+                    </List>
                     {res.map((data) => (
                         <List>
                             <CheckButton></CheckButton>

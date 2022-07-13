@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
 
-const BASEURL = "http://10.156.147.203:8080"
+const BASEURL = process.env.REACT_APP_BASE_URL;
 const font = 'ACCchildrenheartOTF-Regular';
 
 function Signup() {
@@ -14,13 +14,13 @@ function Signup() {
         await axios.post(`${BASEURL}/member`,
             {
                 accountId: id,
-                password:  password
+                password: password
             }
         );
     }
-    const onSignup = async() => {
+    const onSignup = async () => {
         if (password === checkPassword) {
-            
+
             try {
                 await signup()
                 alert("회원가입 되셨어 로그인 페이지로 이동해서 로그인 해줘요")
@@ -29,7 +29,7 @@ function Signup() {
             } catch (error) {
                 alert(error.response.data);
             }
-           
+
         }
         else alert(` ${id}님아 비밀번호가 달라 확인하셔`)
     }
@@ -49,7 +49,7 @@ function Signup() {
                     <Input onChange={(e) => { setCheckPassword(e.target.value); }} type="password"></Input>
                 </MakePassword>
                 <Footer>
-                    <Link to="./login">
+                    <Link to="/login">
                         <GoLogin>로그인화면으로</GoLogin>
                     </Link>
                     <MakeButton onClick={onSignup}>가입하기</MakeButton>
