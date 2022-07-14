@@ -10,7 +10,6 @@ function CheckButton () {
             setCheckIcon(CheckIcon);
             setIsSuccess(true);
         } else {
-            console.log("asdfsa");
             setCheckIcon("");
             setIsSuccess(false);
         }

@@ -3,6 +3,7 @@ import Todolist from './todolist';
 import Signup from './signup';
 import Login from './login';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Donelist from './donelist';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/signup" element={<Signup></Signup>}></Route>
         <Route path="/todolist" element={<Todolist></Todolist>}></Route>
         <Route path="/login" element={<Login></Login>}></Route>
+        <Route path="/donelist" element={<Donelist></Donelist>}></Route>
       </Routes>
     </BrowserRouter>
   )

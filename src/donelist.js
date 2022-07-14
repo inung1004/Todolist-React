@@ -1,17 +1,16 @@
 import styled from 'styled-components'
 import X from "./img/x.svg"
-import CheckButton from './checkbutton'
 import { useEffect, useState } from 'react'
 import request from "./request";
 import { Link } from 'react-router-dom';
 
-const BASEURL = process.env.REACT_APP_BASE_URL
+const BASEURL = process.env.REACT_APP_BASE_URL;
 const font = 'ACCchildrenheartOTF-Regular';
 
 
-function Todolist() {
-    const getTodoList = async () => {
-        const res = await request.get(`${BASEURL}/todo`)  //투두 목록 가져오기
+function Donelist() {
+    const DoneList = async () => {
+        const res = await request.get(`${BASEURL}/done`)  //DoneList 목록 가져오기
         setRes((res.data));
         console.log(res.data);
     }
@@ -25,26 +24,26 @@ function Todolist() {
                     contents: input
                 }
             );
-            getTodoList();
-            setInput(""); //인풋창 비워주기
+            DoneList();
+            setInput(""); 
         }
     }
 
     useEffect(() => {
-        getTodoList()
-    }, [/*여기가 비어있으면 렌더링했을 때 한 번만 실행*/]) // 새로고침했을 때 딱 한 번만 저장해놓은 투두 목록 불러오기
+        DoneList()
+    }, []) 
 
     const deleteList = async (Id) => {
-        await request.delete(`${BASEURL}/todo/${Id}`).then(() => getTodoList()) // .then(getTodoList()) -> 이렇게 하면 함 쉬고 실행 
+        await request.delete(`${BASEURL}/done/${Id}`).then(() => DoneList()) 
     }
 
     const allDelete = async () => {
-        await request.delete(`${BASEURL}/todo/all`)
-        getTodoList();
+        await request.delete(`${BASEURL}/done/all`)
+        DoneList();
     }
 
     const onCrystal = async (e, id) => {
-        await request.put(`${BASEURL}/todo/${id}`,
+        await request.put(`${BASEURL}/done/${id}`,
             {
                 contents: e.target.value
             }
@@ -54,30 +53,27 @@ function Todolist() {
     return (
         <>
             <header>
-                <Link to="/donelist">
-                <Godone> >> Done list </Godone>
+                <Link to="/todolist">
+                <GoTodo> >> Todo list</GoTodo>
                 </Link>
-                <TitleDiv>To do list</TitleDiv>
-                <TodoInput onChange={(e) => { setInput(e.target.value); }} value={input} onKeyPress={onSubmit}></TodoInput>
+                <TitleDiv>Done list</TitleDiv>
+                <DoneInput onChange={(e) => { setInput(e.target.value); }} value={input} onKeyPress={onSubmit}></DoneInput>
             </header>
             <section>
-                <Subtitle>할 일</Subtitle>
+                <Subtitle>내가 오늘 해낸 일</Subtitle>
                 <ListContainer>
                     <AllDeleteButton onClick={() => allDelete()}>ALL</AllDeleteButton>
                     <List>
-                        <CheckButton></CheckButton>
-                        <Todo defaultValue={"그림 색칠하기"} onBlur={(e) => onCrystal(e, 3)}></Todo>
+                        <Done defaultValue={"Todolist 완성"} onBlur={(e) => onCrystal(e, 3)}></Done>
                         <DeleteButton onClick={() => deleteList(3)}><img src={X} /></DeleteButton>
                     </List>
                     <List>
-                        <CheckButton></CheckButton>
-                        <Todo defaultValue={"컴구 복습하기"} onBlur={(e) => onCrystal(e, 3)}></Todo>
+                        <Done defaultValue={"개인프로젝트 보고서 다 씀"} onBlur={(e) => onCrystal(e, 3)}></Done>
                         <DeleteButton onClick={() => deleteList(3)}><img src={X} /></DeleteButton>
                     </List>
                     {res.map((data) => (
                         <List>
-                            <CheckButton></CheckButton>
-                            <Todo defaultValue={data.contents} onBlur={(e) => onCrystal(e, data.id)}></Todo>
+                            <Done defaultValue={data.contents} onBlur={(e) => onCrystal(e, data.id)}></Done>
                             <DeleteButton onClick={() => deleteList(data.id)}><img src={X} /></DeleteButton>
                         </List>
                     ))}
@@ -99,7 +95,7 @@ const TitleDiv = styled.h1`
     border-radius: 50px;
     margin-top: 10px;
 `
-const TodoInput = styled.input`
+const DoneInput = styled.input`
     font-family: ${font};
     width: 890px;
     height: 65px;
@@ -133,11 +129,12 @@ const List = styled.div`
     padding-top: 22px;
     padding-bottom: 22px;
     padding-left: 44px;
+    justify-content: center;
 `
 
-const Todo = styled.input`
+const Done = styled.input`
     font-family: ${font};
-    width: 630px;
+    width: 650px;
     height: 48px;
     border-radius: 50px;
     background-color : #ebebeb;
@@ -175,7 +172,8 @@ const AllDeleteButton = styled.button`
     border: none;
 
 `
-const Godone = styled.button`
+
+const GoTodo = styled.button`
     height: 44px;
     width: 210px;
     margin-top: 10px;
@@ -187,4 +185,4 @@ const Godone = styled.button`
     font-family: ${font};
     font-size: 25px;
 `
-export default Todolist;
+export default Donelist;
